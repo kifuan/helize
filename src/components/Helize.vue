@@ -14,8 +14,8 @@ import {
 import { useClipboard, useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
-function randIndex(end: any[]): number {
-  return Math.floor(Math.random() * end.length)
+function randIndex(end: number): number {
+  return Math.floor(Math.random() * end)
 }
 
 const num = useLocalStorage('num', 15)
@@ -36,7 +36,7 @@ const output = computed(() => {
   if (num.value === undefined || num.value === null)
     return 'Invalid number'
 
-  if (count.value === undefined || count.value === null)
+  if (!count.value)
     return 'Invalid count'
 
   const b = binary.value
@@ -50,13 +50,16 @@ const output = computed(() => {
 
   // Ensure the numbers are enough.
   while (numbers.length < count.value)
-    numbers.push(numbers[randIndex(numbers)])
+    numbers.push(numbers[randIndex(numbers.length)])
 
   while (numbers.length > count.value) {
-    const dropIndex = randIndex(numbers)
+    const dropIndex = randIndex(numbers.length)
     const [num] = numbers.splice(dropIndex, 1)
-    numbers[randIndex(numbers)] |= num
+    numbers[randIndex(numbers.length)] |= num
   }
+
+  while (randIndex(count.value) !== 0)
+    numbers[randIndex(numbers.length)] |= numbers[randIndex(numbers.length)]
 
   return numbers.sort((a, b) => a - b).join(' | ')
 })
