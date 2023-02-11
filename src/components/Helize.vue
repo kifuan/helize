@@ -25,13 +25,19 @@ const message = useMessage()
 const { copy, isSupported } = useClipboard()
 
 const binary = computed(() => {
-  return num.value?.toString(2) ?? '0'
+  return num.value?.toString(2) ?? 'Invalid number'
 })
 
 const output = computed(() => {
   // A trigger to apply computation.
   if (!regenerateSign.value)
     return 'dummy'
+
+  if (num.value === undefined || num.value === null)
+    return 'Invalid number'
+
+  if (count.value === undefined || count.value === null)
+    return 'Invalid count'
 
   const b = binary.value
   const numbers = Array.from(b).map(
@@ -42,13 +48,11 @@ const output = computed(() => {
     index => 1 << (b.length - index - 1),
   )
 
-  const expectedLength = count.value ?? 1
-
   // Ensure the numbers are enough.
-  while (numbers.length < expectedLength)
+  while (numbers.length < count.value)
     numbers.push(numbers[randIndex(numbers)])
 
-  while (numbers.length > expectedLength) {
+  while (numbers.length > count.value) {
     const dropIndex = randIndex(numbers)
     const [num] = numbers.splice(dropIndex, 1)
     numbers[randIndex(numbers)] |= num
