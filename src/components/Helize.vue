@@ -6,6 +6,7 @@ import {
   NH1,
   NInput,
   NInputNumber,
+  NP,
   NSpace,
   useMessage,
 } from 'naive-ui'
@@ -71,6 +72,7 @@ async function handleCopy() {
 
 <template>
   <NH1>Helize</NH1>
+  <NP>Works better when serval "1"s in the binary.</NP>
   <NForm label-placement="left" label-width="auto" size="large">
     <NFormItem label="Number">
       <NInputNumber
@@ -85,6 +87,9 @@ async function handleCopy() {
         placeholder="Please input the count"
         :style="{ width: '100%' }"
       />
+    </NFormItem>
+    <NFormItem label="Binary">
+      <NInput readonly :value="binary" />
     </NFormItem>
     <NFormItem label="Output">
       <NInput readonly :value="output" />
