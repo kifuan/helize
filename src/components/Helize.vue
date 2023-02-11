@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NA,
   NButton,
   NForm,
   NFormItem,
@@ -73,6 +74,12 @@ async function handleCopy() {
 <template>
   <NH1>Helize</NH1>
   <NP>Works better when serval "1"s in the binary.</NP>
+  <NP>
+    Repository link:
+    <NA href="https://github.com/kifuan/helize" target="_blank">
+      kifuan/helize
+    </NA>
+  </NP>
   <NForm label-placement="left" label-width="auto" size="large">
     <NFormItem label="Number">
       <NInputNumber
