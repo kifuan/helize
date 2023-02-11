@@ -11,15 +11,15 @@ import {
   NSpace,
   useMessage,
 } from 'naive-ui'
-import { useClipboard } from '@vueuse/core'
+import { useClipboard, useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 function randIndex(end: any[]): number {
   return Math.floor(Math.random() * end.length)
 }
 
-const num = ref(15)
-const count = ref(3)
+const num = useLocalStorage('num', 15)
+const count = useLocalStorage('count', 3)
 const regenerateSign = ref(true)
 const message = useMessage()
 const { copy, isSupported } = useClipboard()
