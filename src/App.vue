@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { NMessageProvider } from 'naive-ui'
 import Helize from './components/Helize.vue'
 </script>
 
 <template>
-  <Helize />
+  <NMessageProvider>
+    <Helize />
+  </NMessageProvider>
 </template>
 
 <style>

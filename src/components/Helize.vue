@@ -1,30 +1,40 @@
 <script setup lang="ts">
-import { NButton, NForm, NFormItem, NH1, NInput, NInputNumber } from 'naive-ui'
+import {
+  NButton,
+  NForm,
+  NFormItem,
+  NH1,
+  NInput,
+  NInputNumber,
+  NSpace,
+  useMessage,
+} from 'naive-ui'
+import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
-function randInt(end: number): number {
-  return Math.floor(Math.random() * end)
+function randIndex(end: any[]): number {
+  return Math.floor(Math.random() * end.length)
 }
 
 const num = ref(15)
 const count = ref(3)
 const regenerateSign = ref(true)
+const message = useMessage()
+const { copy, isSupported } = useClipboard()
 
-function regenerate() {
-  regenerateSign.value = false
-  regenerateSign.value = true
-}
+const binary = computed(() => {
+  return num.value?.toString(2) ?? '0'
+})
 
 const output = computed(() => {
   // A trigger to apply computation.
   if (!regenerateSign.value)
     return 'dummy'
 
-  const binary = Array.from(num.value.toString(2))
-  const numbers = binary.map(
+  const numbers = Array.from(binary.value).map(
     (_, index) => index,
   ).filter(
-    index => binary[index] === '1',
+    index => binary.value[index] === '1',
   ).map(
     index => 1 << index,
   )
@@ -33,16 +43,30 @@ const output = computed(() => {
 
   // Ensure the numbers are enough.
   while (numbers.length < expectedLength)
-    numbers.push(numbers[randInt(numbers.length)])
+    numbers.push(numbers[randIndex(numbers)])
 
   while (numbers.length > expectedLength) {
-    const dropIndex = randInt(numbers.length)
+    const dropIndex = randIndex(numbers)
     const [num] = numbers.splice(dropIndex, 1)
-    numbers[randInt(numbers.length)] |= num
+    numbers[randIndex(numbers)] |= num
   }
 
   return numbers.sort((a, b) => a - b).join(' | ')
 })
+
+function handleRegenerate() {
+  regenerateSign.value = false
+  regenerateSign.value = true
+}
+
+async function handleCopy() {
+  if (!isSupported.value) {
+    message.error('Your browser does not support Clipboard API')
+    return
+  }
+  await copy(output.value)
+  message.success('Copied')
+}
 </script>
 
 <template>
@@ -66,7 +90,12 @@ const output = computed(() => {
       <NInput readonly :value="output" />
     </NFormItem>
   </NForm>
-  <NButton @click="regenerate">
-    Regenerate
-  </NButton>
+  <NSpace justify="end">
+    <NButton ghost type="primary" @click="handleRegenerate">
+      Regenerate
+    </NButton>
+    <NButton ghost type="primary" @click="handleCopy">
+      Copy
+    </NButton>
+  </NSpace>
 </template>
