@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NForm, NFormItem, NInput, NH1 } from 'naive-ui'
+import { NForm, NFormItem, NH1, NInput } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 const num = ref('0')
