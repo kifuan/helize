@@ -33,12 +33,13 @@ const output = computed(() => {
   if (!regenerateSign.value)
     return 'dummy'
 
-  const numbers = Array.from(binary.value).map(
+  const b = binary.value
+  const numbers = Array.from(b).map(
     (_, index) => index,
   ).filter(
-    index => binary.value[index] === '1',
+    index => b[index] === '1',
   ).map(
-    index => 1 << index,
+    index => 1 << (b.length - index - 1),
   )
 
   const expectedLength = count.value ?? 1
