@@ -9,6 +9,12 @@ function randInt(end: number): number {
 const num = ref(15)
 const count = ref(3)
 const regenerateSign = ref(true)
+
+function regenerate() {
+  regenerateSign.value = false
+  regenerateSign.value = true
+}
+
 const output = computed(() => {
   // A trigger to apply computation.
   if (!regenerateSign.value)
@@ -37,11 +43,6 @@ const output = computed(() => {
 
   return numbers.sort((a, b) => a - b).join(' | ')
 })
-
-function regenerate() {
-  regenerateSign.value = false
-  regenerateSign.value = true
-}
 </script>
 
 <template>
